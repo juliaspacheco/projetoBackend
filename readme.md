@@ -1,61 +1,118 @@
-# Criando pasta e organizando estrutura do projeto
-* Abrir gitBash
+# Clonar projeto do gitHub, criar confguração da API e testar
+* Copiar url do projeto no gitHub
+* Abrir o gitBash
 
-Criar pasta para a aplicação
+**Clonar o repositório para sua máquina**
 ```
-mkdir NOME PASTA
+git clone URL_REPOSITORIO
 ```
-Acessar pasta
+
+**Acessar pasta**
 ```
-cd NOME PASTA
+cd NOME_REPOSITORIO
 ```
-Criar arquivo para documentar projeto
+
+**Reinstalar os pacotes**
 ```
-touch readme.md
+npm i
 ```
-Iniciar o gerenciador de pacotes Node
+**Criar arquivo .env na raiz do projeto**
+* Arquivo utilizado para armazenar as variáveis que serão reutilizadas na aplicação
 ```
-npm init -y
+nano .env
 ```
-Instalar os pacotes
+**Digitar no arquivo**
+* Variável que contém a porta que o servidor estará rodando
 ```
-npm i express nodemon dotenv
+PORT = 3008
 ```
-Abrir o VSCode
-```
-code .
-```
-Criar arquivo .gitignore
+
+**Adicionar arquivo .env no .gitignore**
+* Informações sensíveis do sistema
 ```
 nano .gitignore
 ```
-* Ctrl + o: Salvar o arquivo
-* Enter: Confirmar
-* Ctrl + x: Fechar o arquivo
+```
+.env
+```
 
-Adicionar no arquivo .gitignore o nome da pasta criada após instalação dos pacotes
+**Abrir o VSCode**
 ```
-node_modules
+code .
 ```
-Criar estrutura de arquivos e pastas
+
+**Criar arquivo de exemplo para as variáveis necessárias da aplicação**
+* Como o arquivo .env não foi enviado para o gitHub, precisamos criar o exemplo das variáveis necessárias da aplicação
 ```
-mkdir src
+nano .env.example
 ```
-Criar arquivos dentro da pasta src
+
+**Adicionar no arquivo .env.example**
 ```
-touch src/app.js
+PORT = 
 ```
+
+**Digitar no arquivo app.js**
+* Importar o pacote express(servidor)
 ```
-touch src/server.js
+const express = require('express');
 ```
-Criar pastas dentro da pasta src
+
+* Importar o pacote dotenv, gerenciador de variáveis de ambiente
 ```
-mkdir src/config
+const dotenv = require('dotenv').config();
 ```
+
+* Instanciar o express na variável app
 ```
-mkdir src/controllers
+const app = express();
 ```
+
+* Setar a porta do servidor a partir do arquivo .env
+* O operador condicional '||' significa 'OU', caso não tenha a variável PORT, será utilizado o valor '3333'
 ```
-mkdir src/routes
+app.set('port', process.env.PORT || 3333);
 ```
-* Enviar estrutura do projeto para o gitHub
+
+* Exportar as configurações na variável app
+```
+module.exports = app;
+```
+
+**Digitar no arquivo server.js**
+* Importar o arquivo app
+```
+const app = require('./app');
+```
+
+* Importar a porta do servidor
+```
+const port = app.get('port');
+```
+
+* Testar API com a função listen
+* 1º parâmetro: passamos a porta do servidor
+* 2º parâmetro: arrow function para retornar um console informando a porta que está rodando o servidor
+```
+app.listen(port, () => {
+    console.log(`Running on port ${ port }!`);
+});
+```
+
+**Abrir o arquivo package.json e alterar a chave 'scripts'**
+* Substituir o comando 'test' pelo comando 'start' na linha 7
+```
+"start":"nodemon src/server.js"
+```
+
+**Rodar o comando no terminal com gitBash**
+```
+npm run start
+```
+
+**Parar servidor e voltar**
+```
+Ctrl + c 
+```
+
+* Enviar os arquivos atualizados para o gitHub
