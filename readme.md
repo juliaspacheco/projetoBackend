@@ -1,4 +1,4 @@
-# Clonar projeto do gitHub, criar confguração da API e testar
+# Clonar projeto do gitHub, criar a configuração do arquivo de rotas
 * Copiar url do projeto no gitHub
 * Abrir o gitBash
 
@@ -16,24 +16,15 @@ cd NOME_REPOSITORIO
 ```
 npm i
 ```
-**Criar arquivo .env na raiz do projeto**
-* Arquivo utilizado para armazenar as variáveis que serão reutilizadas na aplicação
+**Criar pasta dentro da pasta src**
 ```
-nano .env
-```
-**Digitar no arquivo**
-* Variável que contém a porta que o servidor estará rodando
-```
-PORT = 3008
+mkdir src/routes
 ```
 
-**Adicionar arquivo .env no .gitignore**
-* Informações sensíveis do sistema
+**Criar arquivo dentro da pasta routes**
+* Responsável pelas rotas que serão acessadas na API
 ```
-nano .gitignore
-```
-```
-.env
+touch src/routes/rotas.js
 ```
 
 **Abrir o VSCode**
@@ -41,78 +32,41 @@ nano .gitignore
 code .
 ```
 
-**Criar arquivo de exemplo para as variáveis necessárias da aplicação**
-* Como o arquivo .env não foi enviado para o gitHub, precisamos criar o exemplo das variáveis necessárias da aplicação
+**Digitar no arquivo rotas.js**
 ```
-nano .env.example
-```
+// Importar o modulo de Router do express
+const { Router } = require('express');
 
-**Adicionar no arquivo .env.example**
-```
-PORT = 
+// Instanciar o Router na variável router
+const router = Router();
+
+router.get('/listar', (request, response) => {
+    response.send('Método GET: listar informações');
+});
+router.post('/cadastrar', (request, response) => {
+    response.send('Método POST: salvar informações');
+});
+router.put('/user/:id', (request, response) => {
+    response.send('Método PUT: atualizar informações');
+});
+router.delete('/user/:id', (request, response) => {
+    response.send('Método DELETE: remover informações');
+});
+
+module.exports = router;
 ```
 
 **Digitar no arquivo app.js**
-* Importar o pacote express(servidor)
+* Importar o arquivo de rotas nas configurações da API
+* Habilitar as rotas na aplicação
 ```
-const express = require('express');
+const router = require('./routes/rotas');
 ```
+```
+app.use('/api', router);
+```
+* Esta linha deve inserida depois da criação da variável app
 
-* Importar o pacote dotenv, gerenciador de variáveis de ambiente
-```
-const dotenv = require('dotenv').config();
-```
 
-* Instanciar o express na variável app
-```
-const app = express();
-```
-
-* Setar a porta do servidor a partir do arquivo .env
-* O operador condicional '||' significa 'OU', caso não tenha a variável PORT, será utilizado o valor '3333'
-```
-app.set('port', process.env.PORT || 3333);
-```
-
-* Exportar as configurações na variável app
-```
-module.exports = app;
-```
-
-**Digitar no arquivo server.js**
-* Importar o arquivo app
-```
-const app = require('./app');
-```
-
-* Importar a porta do servidor
-```
-const port = app.get('port');
-```
-
-* Testar API com a função listen
-* 1º parâmetro: passamos a porta do servidor
-* 2º parâmetro: arrow function para retornar um console informando a porta que está rodando o servidor
-```
-app.listen(port, () => {
-    console.log(`Running on port ${ port }!`);
-});
-```
-
-**Abrir o arquivo package.json e alterar a chave 'scripts'**
-* Substituir o comando 'test' pelo comando 'start' na linha 7
-```
-"start":"nodemon src/server.js"
-```
-
-**Rodar o comando no terminal com gitBash**
-```
-npm run start
-```
-
-**Parar servidor e voltar**
-```
-Ctrl + c 
-```
 
 * Enviar os arquivos atualizados para o gitHub
