@@ -21,11 +21,70 @@ npm i
 ```
 PORT = 3000
 ```
+**Criar pasta controllers na pasta src**
+```
+mkdir src/controllers
+```
+
+**Criar arquivo crudController.js na pasta controllers**
+```
+touch src/controllers/crudController.js
+```
+
+**Colar os códigos no arquivo crudController.js**
+```
+function listarDados(request, response) {
+    response.send('Retorno de lista de informação do Banco de dados');
+}
+
+function gravarDados(request, response) {
+    response.send('Método utilizado para salvar informações!');
+}
+
+function atualizarDados(request, response) {
+    response.send('Método utilizado para editar informações!');
+}
+
+function deletarDados(request, response) {
+    response.send('Método utilizado para deletar informações!');
+}
+
+module.exports = {
+    listarDados,
+    gravarDados, 
+    atualizarDados, 
+    deletarDados
+}
+```
+
+**Alterar o arquivo rotas.js**
+```
+// Importar pacote do express
+const { Router } = require('express');
+// Instanciar o Router na variavel router
+const router = Router();
+// Importar funções do controller para a rota acessar as funções
+const { 
+    listarDados,
+    gravarDados,
+    atualizarDados,
+    deletarDados
+ } = require('../controllers/crudController');
+
+router.get('/listar', listarDados);
+
+router.post('/gravar', gravarDados);
+
+router.put('/atualizar/:id', atualizarDados);
+
+router.delete('/deletar/:id', deletarDados);
+
+module.exports = router;
+```
 
 **Testar os endpoints (rotas) da API:**
 
 ## Insomnia
-* Programa open source feito em javascript. O programa é um testador de rotas para APIs, como todos os outros (por exemplo o postman), você coloca a url da API e o caminho da rota
 
 * Abrir o Insomnia no computador
 
@@ -62,20 +121,20 @@ http://localhost:3000/api/listar
 
 * Após validar que a API esta rodando, execute a ação da rota clicando no botão 'Send'
 
-* O Insomnia deverá retornar a mensagem descrita no método GET do arquivo de rotas
+* O Insomnia deverá  validar os conteúdos de cada rota retornados pelas funções do 'crudController'
 
 ### Método GET
-<img src="img/Método GET.png">
+<img src="img/GET.PNG">
 
 ## Fazer o mesmo processo com os próximos métodos (POST, PUT e DELETE)
 
 ### Método POST
-<img src="img/Método POST.png">
+<img src="img/POST.PNG">
 
 ### Método PUT
-<img src="img/Método PUT.png">
+<img src="img/PUT.PNG">
 
 ### Método DELETE
-<img src="img/Método DELETE.png">
+<img src="img/DELETE.PNG">
 
 **Enviar os arquivos atualizados para o gitHub**
