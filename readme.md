@@ -1,4 +1,4 @@
-# Testar rotas da API com o Insomnia
+# Criar controllers para gerenciar as requisições das rotas
 * Copiar url do projeto no gitHub
 * Abrir o gitBash
 
