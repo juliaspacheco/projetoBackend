@@ -1,4 +1,4 @@
-# Criar controllers para gerenciar as requisições das rotas
+# Criar configuração com banco de dados
 * Copiar url do projeto no gitHub
 * Abrir o gitBash
 
@@ -16,125 +16,65 @@ cd NOME_REPOSITORIO
 ```
 npm i
 ```
+
 **Recriar o arquivo .env**
 * Definir as variáveis no arquivo .env a partir das chaves definidas no arquivo .env.example
 ```
 PORT = 3000
 ```
-**Criar pasta controllers na pasta src**
-```
-mkdir src/controllers
-```
 
-**Criar arquivo crudController.js na pasta controllers**
+**Instalar o pacote mysql2**
 ```
-touch src/controllers/crudController.js
+npm i mysql2
 ```
 
-**Colar os códigos no arquivo crudController.js**
+**Dentro da pasta 'src', vamos criar uma pasta de nome 'config'. Dentro desta pasta vamos criar um arquivo com nome 'db.js' e colar o código:**
 ```
-function listarDados(request, response) {
-    response.send('Retorno de lista de informação do Banco de dados');
-}
+// Arquivo responsável pela configuração e conexão com o banco de dados
+ 
+// Importar o pacote do mysql
+const mysql = require('mysql2');
 
-function gravarDados(request, response) {
-    response.send('Método utilizado para salvar informações!');
-}
+// Importar o pacote de acesso aos de variáveis de ambiente
+require('dotenv').config();
 
-function atualizarDados(request, response) {
-    response.send('Método utilizado para editar informações!');
-}
+// Estabelece a criação da conexão com banco 
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    port: process.env.DB_PORT
+});
 
-function deletarDados(request, response) {
-    response.send('Método utilizado para deletar informações!');
-}
+// Testa se o banco esta conectado
+connection.connect((err) => {
+  if (err) {
+    console.log(`Erro na conexão com banco: ${err}`);
+  } else {
+    console.log("Mysql Connected!");
+  }
+});
 
-module.exports = {
-    listarDados,
-    gravarDados, 
-    atualizarDados, 
-    deletarDados
-}
-```
-
-**Alterar o arquivo rotas.js**
-```
-// Importar pacote do express
-const { Router } = require('express');
-// Instanciar o Router na variavel router
-const router = Router();
-// Importar funções do controller para a rota acessar as funções
-const { 
-    listarDados,
-    gravarDados,
-    atualizarDados,
-    deletarDados
- } = require('../controllers/crudController');
-
-router.get('/listar', listarDados);
-
-router.post('/gravar', gravarDados);
-
-router.put('/atualizar/:id', atualizarDados);
-
-router.delete('/deletar/:id', deletarDados);
-
-module.exports = router;
+module.exports = connection;
 ```
 
-**Testar os endpoints (rotas) da API:**
-
-## Insomnia
-
-* Abrir o Insomnia no computador
-
-* Criar um novo projeto, clicando no símbolo de '+'
-
-* Dar um nome ao projeto e clicar no botão 'Create'
-
-* Com o projeto criado, clicar no botão 'New Collection'
-
-* Dar um nome para a coleção e clicar no botão 'Create'
-
-* Criar a primeira requisição para a API clicando no botão 'New HTTP Request'
-
-* Todas as requisições desta coleção ficam listadas no quadro da esquerda
-
-* Por padrão a requisição é criada no método GET, mas podemos alterar o método da requisição clicando no ícone de seta para baixo ao lado do nome 'GET'
-
-* Descrever a url da API com a porta que foi definida
+**Abrir o arquivo .env e digitar o conteúdo abaixo, conforme os comentários**
 ```
-http://localhost:3000
+# Definir a porta do servidor. Ex: 3000
+PORT = 
+
+# DB_HOST: Domínio do servidor. Ex: 'localhost'
+# DB_USER: Usuário do banco de banco de dados. Ex: 'root'
+# DB_PASSWORD: Senha do banco de banco de dados. Ex: 'root'
+# DB_DATABASE: Nome da base de dados criada. Ex: 'projeto_final'
+# DB_PORT: Porta que MySql está instalado. Ex: '3306' ou '3308'
+
+DB_HOST = 
+DB_USER = 
+DB_PASSWORD =
+DB_DATABASE =
+DB_PORT =
 ```
-
-* e as rotas (/api/listar) que criamos no arquivo rotas.js do passo anterior. Ficará assim:
-```
-http://localhost:3000/api/listar
-```
-* Antes de clicar no botão 'Send' para executar a ação da rota, execute o comando 'npm start' no gitBash e  verifique se o retorno estará rodando na porta definida para o servidor
-
-* Exemplo:
-
-```
-'Running on port 3000!'
-```
-
-* Após validar que a API esta rodando, execute a ação da rota clicando no botão 'Send'
-
-* O Insomnia deverá  validar os conteúdos de cada rota retornados pelas funções do 'crudController'
-
-### Método GET
-<img src="img/GET.PNG">
-
-## Fazer o mesmo processo com os próximos métodos (POST, PUT e DELETE)
-
-### Método POST
-<img src="img/POST.PNG">
-
-### Método PUT
-<img src="img/PUT.PNG">
-
-### Método DELETE
-<img src="img/DELETE.PNG">
 
 **Enviar os arquivos atualizados para o gitHub**
